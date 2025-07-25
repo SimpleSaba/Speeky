@@ -1,3 +1,4 @@
+import { UserProvider } from "@/lib/UserContext";
 import "./globals.css";
 
 export default function RootLayout({
@@ -8,7 +9,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div>{children}</div>
+        <UserProvider>{children}</UserProvider>
       </body>
     </html>
   );

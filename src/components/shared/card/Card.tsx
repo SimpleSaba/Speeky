@@ -19,7 +19,7 @@ import { useState } from "react";
 export type SubmitData = {
   email: string;
   password: string;
-  name?: string;
+  firstName?: string;
   lastName?: string;
 };
 
@@ -62,9 +62,9 @@ const CustomCard = ({
                 <div className="grid gap-2">
                   <Label htmlFor="name">Name</Label>
                   <Input
-                    id="name"
-                    type="name"
-                    placeholder="name"
+                    id="firstName"
+                    type="firstName"
+                    placeholder="firstName"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -123,7 +123,7 @@ const CustomCard = ({
             onSubmit?.({
               email,
               password,
-              name,
+              firstName: name,
               lastName,
             })
           }

@@ -1,13 +1,25 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 // Define the shape of your user state
-interface User {
-  email: string;
-  name?: string;
-  lastName?: string;
-}
+export type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+  coverPhoto: string;
+  bio: string;
+  location: string;
+  birthday: string;
+  isFirstLogin: boolean;
+};
 
 interface UserContextType {
   user: User | null;
@@ -20,7 +32,26 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const logout = () => setUser(null);
+  // Load user from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("userData");
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
+
+  // Save user to localStorage when it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("userData", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("userData");
+    }
+  }, [user]);
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userAccessToken");
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser, logout }}>

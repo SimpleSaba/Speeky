@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Speeky from "@/components/shared/icon/Speeky";
 

@@ -1,19 +1,40 @@
 "use client";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import CustomCard, { SubmitData } from "@/components/shared/card/Card";
 import { signup } from "@/lib/actions/userAction";
-import React from "react";
+import { useUser } from "@/lib/UserContext";
 
 const SignUpPage = () => {
-  const handleSubmit = ({ email, password, name, lastName }: SubmitData) => {
-    const fullName = name + " " + lastName;
+  const router = useRouter();
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/app/home");
+    }
+  }, [user, router]);
+
+  if (user) return null;
+
+  const handleSubmit = async ({
+    email,
+    password,
+    firstName,
+    lastName,
+  }: SubmitData) => {
     try {
-      const response = signup({ email, password, name: fullName });
-      console.log(response);
+      await signup({
+        email,
+        password,
+        firstName,
+        lastName,
+      });
+      router.push("/auth/login");
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <>
       <CustomCard

@@ -5,6 +5,9 @@ export default {
         login: "/login",
         signup: "/signup",
       },
+      user: {
+        update: "/user/:id",
+      },
     },
   },
 };

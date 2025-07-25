@@ -1,15 +1,30 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import CustomCard, { SubmitData } from "@/components/shared/card/Card";
 import { login } from "@/lib/actions/userAction";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/lib/UserContext";
 
 const LoginPage = () => {
-  const handleSubmit = async ({ email, password }: SubmitData) => {
-    console.log(email, password);
+  const { user, setUser } = useUser();
+  const router = useRouter();
+  console.log("user", user);
 
+  useEffect(() => {
+    if (user && user.isFirstLogin) {
+      router.replace("/app/profile");
+    } else if (user) {
+      router.replace("/app/home");
+    }
+  }, [user, router]);
+
+  if (user) return null;
+
+  const handleSubmit = async ({ email, password }: SubmitData) => {
     try {
-      const response = login({ email, password });
-      console.log(response);
+      const response = await login({ email, password });
+      setUser(response.user);
+      router.push("/app/home");
     } catch (error) {
       console.log(error);
     }
